@@ -1,17 +1,15 @@
 /*
- Rails.js 0.0.1 - jQuery Dispatcher for Rails
- Copyright (c) 2008 Nando Vieira (simplesideias.com.br)
- Dual licensed under the MIT (MIT-LICENSE.txt)
- and GPL (GPL-LICENSE.txt) licenses.
-*/
+Rails.js - jQuery Dispatcher for Rails
+Copyright (c) 2008 Nando Vieira (simplesideias.com.br)
+Dual licensed under the MIT (MIT-LICENSE.txt)
+and GPL (GPL-LICENSE.txt) licenses.
 
-/*
 Usage: Add this code in your application.html.erb layout file
 
 <html>
 	<head>
-		<meta name="rails-controller" content="<%= response.controller_name %>" />
-		<meta name="rails-action" content="<%= response.action_name %>" />
+		<meta name="rails-controller" content="<%= controller.controller_name %>" />
+		<meta name="rails-action" content="<%= controller.action_name %>" />
 		<%= javascript_include_tag 'jquery' %>
 		<%= javascript_include_tag 'rails' %>
 		<%= javascript_include_tag 'lib.js' %>
@@ -55,6 +53,7 @@ var Rails = {
 
 		if (css_name) {
 			$('body').addClass(css_name);
+			return css_name;
 		}
 	},
 	
@@ -80,8 +79,17 @@ var Rails = {
 				Rails[controller_name][action_name]();
 			}
 		}
-		Rails.browserName();
 	}
 };
 
-$(document).ready(Rails.dispatcher);
+(function($){
+	$.stopEvent = function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+	};
+	
+	$(document).ready(function(){
+		Rails.dispatcher();
+		Rails.browserName();
+	});
+})(jQuery);
