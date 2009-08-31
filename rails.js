@@ -27,6 +27,10 @@ Rails["index"] = function() {
 Rails["new"] = function() {
 	// execute specific code for users/new
 }
+
+Rails-JS also detect the browser and set a body CSS class. If is IE, 
+an additional body class identifying the version will be added.
+All browsers and IE7+ also add a body class "capable".
 */ 
 var Rails = {
 	ALIASES: {
@@ -38,6 +42,7 @@ var Rails = {
 		var css_name = null;
 		var ua = navigator.userAgent;
 		var matches = null;
+		var capable = true;
 
 		if (ua.match(/firefox/i)) {
 			css_name = 'firefox';
@@ -45,6 +50,7 @@ var Rails = {
 			css_name = 'safari';
 		} else if (matches = ua.match(/msie (\d+)/i)) {
 			css_name = 'ie ie' + matches[1];
+			capable = parseInt(matches[1] || 0) >= 7;
 		} else if (ua.match(/opera/i)) {
 			css_name = 'opera';
 		} else if (ua.match(/mozilla/)) {
@@ -52,7 +58,9 @@ var Rails = {
 		}
 
 		if (css_name) {
-			$('body').addClass(css_name);
+			$('body')
+				.addClass(css_name)
+				.addClass(capable? "capable" : "");
 			return css_name;
 		}
 	},
