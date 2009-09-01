@@ -10,9 +10,9 @@ Usage: Add this code in your application.html.erb layout file
 	<head>
 		<meta name="rails-controller" content="<%= controller.controller_name %>" />
 		<meta name="rails-action" content="<%= controller.action_name %>" />
-		<%= javascript_include_tag 'jquery' %>
-		<%= javascript_include_tag 'rails' %>
-		<%= javascript_include_tag 'lib.js' %>
+		<%= javascript_include_tag "jquery" %>
+		<%= javascript_include_tag "rails" %>
+		<%= javascript_include_tag "lib.js" %>
 	</head>
 </html>
 
@@ -34,8 +34,8 @@ All browsers and IE7+ also add a body class "capable".
 */ 
 var Rails = {
 	ALIASES: {
-		'create': 'new',
-		'update': 'edit'
+		"create": "new",
+		"update": "edit"
 	},
 	
 	browserName: function() {
@@ -45,20 +45,21 @@ var Rails = {
 		var capable = true;
 
 		if (ua.match(/firefox/i)) {
-			css_name = 'firefox';
+			css_name = "firefox";
 		} else if (ua.match(/safari/i)) {
-			css_name = 'safari';
+			css_name = "safari";
 		} else if (matches = ua.match(/msie (\d+)/i)) {
-			css_name = 'ie ie' + matches[1];
+			css_name = "ie ie" + matches[1];
 			capable = parseInt(matches[1] || 0) >= 7;
 		} else if (ua.match(/opera/i)) {
-			css_name = 'opera';
+			css_name = "opera";
 		} else if (ua.match(/mozilla/)) {
-			css_name = 'mozilla';
+			css_name = "mozilla";
 		}
 
 		if (css_name) {
-			$('body')
+			$("body")
+				.addClass("has-js")
 				.addClass(css_name)
 				.addClass(capable? "capable" : "");
 			return css_name;
@@ -66,8 +67,8 @@ var Rails = {
 	},
 	
 	dispatcher: function() {
-		var controller_name = $('head meta[name=rails-controller]').attr('content');
-		var action_name = $('head meta[name=rails-action]').attr('content');
+		var controller_name = $("head meta[name=rails-controller]").attr("content");
+		var action_name = $("head meta[name=rails-action]").attr("content");
 		
 		action_name = Rails.ALIASES[action_name] || action_name;
 		
