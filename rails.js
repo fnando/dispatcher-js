@@ -38,25 +38,31 @@ var Rails = {
 		"update": "edit"
 	},
 	
+	ua: navigator.userAgent,
+	
+	init: function() {
+		Rails.dispatcher();
+		Rails.browserName();
+	},
+	
 	browserName: function() {
 		var css_name = null;
-		var ua = navigator.userAgent;
 		var matches = null;
 		var capable = true;
 
-		if (ua.match(/firefox/i)) {
+		if (this.ua.match(/firefox/i)) {
 			css_name = "firefox";
-		} else if (ua.match(/safari/i)) {
+		} else if (this.ua.match(/safari/i)) {
 			css_name = "safari";
-		} else if (matches = ua.match(/msie (\d+)/i)) {
+		} else if (matches = this.ua.match(/msie (\d+)/i)) {
 			css_name = "ie ie" + matches[1];
 			capable = parseInt(matches[1] || 0) >= 7;
-		} else if (ua.match(/opera/i)) {
+		} else if (this.ua.match(/opera/i)) {
 			css_name = "opera";
-		} else if (ua.match(/mozilla/)) {
+		} else if (this.ua.match(/mozilla/i)) {
 			css_name = "mozilla";
 		}
-
+		
 		if (css_name) {
 			$("body")
 				.addClass("has-js")
@@ -97,8 +103,5 @@ var Rails = {
 		e.preventDefault();
 	};
 	
-	$(document).ready(function(){
-		Rails.dispatcher();
-		Rails.browserName();
-	});
+	$(document).ready(Rails.init);
 })(jQuery);
