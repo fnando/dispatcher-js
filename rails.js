@@ -20,31 +20,31 @@ Your lib.js should follow this rule:
 
 Rails.users = {};
 
-Rails["index"] = function() {
+Rails.users["index"] = function() {
 	// execute specific code for users/index
 };
-	
-Rails["new"] = function() {
+
+Rails.users["new"] = function() {
 	// execute specific code for users/new
 }
 
-Rails-JS also detect the browser and set a body CSS class. If is IE, 
+Rails-JS also detect the browser and set a body CSS class. If is IE,
 an additional body class identifying the version will be added.
 All browsers and IE7+ also add a body class "capable".
-*/ 
+*/
 var Rails = {
 	ALIASES: {
 		"create": "new",
 		"update": "edit"
 	},
-	
+
 	ua: navigator.userAgent,
-	
+
 	init: function() {
 		Rails.dispatcher();
 		Rails.browserName();
 	},
-	
+
 	browserName: function() {
 		var css_name = null;
 		var matches = null;
@@ -62,7 +62,7 @@ var Rails = {
 		} else if (this.ua.match(/mozilla/i)) {
 			css_name = "mozilla";
 		}
-		
+
 		if (css_name) {
 			$("body")
 				.addClass("has-js")
@@ -71,24 +71,24 @@ var Rails = {
 			return css_name;
 		}
 	},
-	
+
 	dispatcher: function() {
 		var controller_name = $("head meta[name=rails-controller]").attr("content");
 		var action_name = $("head meta[name=rails-action]").attr("content");
-		
+
 		action_name = Rails.ALIASES[action_name] || action_name;
-		
+
 		// Executed before every controller action
 		if (Rails.before) {
 			Rails.before();
 		}
-		
+
 		if (Rails[controller_name]) {
 			// Executed before any action from the current controller
 			if (Rails[controller_name].before) {
 				Rails[controller_name].before();
 			}
-			
+
 			// The current action per-se
 			if (Rails[controller_name][action_name]) {
 				Rails[controller_name][action_name]();
@@ -102,6 +102,6 @@ var Rails = {
 		e.stopPropagation();
 		e.preventDefault();
 	};
-	
+
 	$(document).ready(Rails.init);
 })(jQuery);
