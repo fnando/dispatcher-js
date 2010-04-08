@@ -14,7 +14,11 @@ Your page must have a meta tag called +page+. This tag should have the controlle
 Rails developers can use the helper below:
 
   def dispatcher_tag
+    controller_name = controller.class.name.underscore
+    controller_name.gsub!(/\//, "_")
+    controller_name.gsub!(/_controller$/, "")
 
+    %[<meta name="page" content="#{controller_name}##{controller.action_name}" />]
   end
 
 Then all you need to do is include <tt>dispatcher.js</tt>
