@@ -32,6 +32,15 @@ new Test.Unit.Runner({
 		assertEqual(1, $("body.has-js").length);
 	}},
 
+	// Detect Chrome
+	testDetectChrome: function() { with(this) {
+		prepare("Chrome");
+		assertEqual(1, $("body.capable").length);
+		assertEqual(1, $("body.chrome").length);
+		assertEqual(1, $("body.safari").length);
+		assertEqual(1, $("body.has-js").length);
+	}},
+
 	// Detect Opera
 	testDetectOpera: function() { with(this) {
 		prepare("Opera");

@@ -28,6 +28,8 @@ var Dispatcher = {
 
 		if (this.ua.match(/firefox/i)) {
 			css_name = "firefox";
+		} else if (this.ua.match(/chrome/i)) {
+			css_name = "chrome safari";
 		} else if (this.ua.match(/safari/i)) {
 			css_name = "safari";
 		} else if (matches = this.ua.match(/msie (\d+)/i)) {
@@ -49,7 +51,7 @@ var Dispatcher = {
 	},
 
 	run: function() {
-	  var page = $("head meta[name=page]").attr("content").toString().split("#");
+		var page = $("head meta[name=page]").attr("content").toString().split("#");
 		var controller_name = page[0];
 		var action_name = page[1];
 
@@ -71,15 +73,15 @@ var Dispatcher = {
 				App[controller_name][action_name]();
 			}
 
-      // The after callback for the current controller
-      if (App[controller_name].after) {
-        App[controller_name].after();
-      };
+			// The after callback for the current controller
+      		if (App[controller_name].after) {
+				App[controller_name].after();
+      		}
 		}
 
 		if (App.after) {
-		  App.after();
-		};
+			App.after();
+		}
 	}
 };
 
