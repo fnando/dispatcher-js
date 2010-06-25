@@ -29,9 +29,13 @@ var Dispatcher = {
 		if (this.ua.match(/firefox/i)) {
 			css_name = "firefox";
 		} else if (this.ua.match(/chrome/i)) {
-			css_name = "chrome safari";
+			css_name = "chrome webkit";
+		} else if (this.ua.match(/iphone/i)) {
+			css_name = "safari iphone webkit";
+		} else if (this.ua.match(/ipad/i)) {
+			css_name = "safari ipad webkit";
 		} else if (this.ua.match(/safari/i)) {
-			css_name = "safari";
+			css_name = "safari webkit";
 		} else if (matches = this.ua.match(/msie (\d+)/i)) {
 			css_name = "ie ie" + matches[1];
 			capable = parseInt(matches[1] || 0) >= 7;

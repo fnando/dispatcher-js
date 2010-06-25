@@ -29,6 +29,27 @@ new Test.Unit.Runner({
 		prepare("Safari");
 		assertEqual(1, $("body.capable").length);
 		assertEqual(1, $("body.safari").length);
+		assertEqual(1, $("body.webkit").length);
+		assertEqual(1, $("body.has-js").length);
+	}},
+
+	// Detect iPhone
+	testDetectiPhone: function() { with(this) {
+		prepare("iPhone");
+		assertEqual(1, $("body.capable").length);
+		assertEqual(1, $("body.iphone").length);
+		assertEqual(1, $("body.safari").length);
+		assertEqual(1, $("body.webkit").length);
+		assertEqual(1, $("body.has-js").length);
+	}},
+
+	// Detect iPad
+	testDetectiPad: function() { with(this) {
+		prepare("iPad");
+		assertEqual(1, $("body.capable").length);
+		assertEqual(1, $("body.ipad").length);
+		assertEqual(1, $("body.safari").length);
+		assertEqual(1, $("body.webkit").length);
 		assertEqual(1, $("body.has-js").length);
 	}},
 
@@ -37,7 +58,7 @@ new Test.Unit.Runner({
 		prepare("Chrome");
 		assertEqual(1, $("body.capable").length);
 		assertEqual(1, $("body.chrome").length);
-		assertEqual(1, $("body.safari").length);
+		assertEqual(1, $("body.webkit").length);
 		assertEqual(1, $("body.has-js").length);
 	}},
 
