@@ -38,7 +38,6 @@ var Dispatcher = {
 			css_name = "safari webkit";
 		} else if (matches = this.ua.match(/msie (\d+)/i)) {
 			css_name = "ie ie" + matches[1];
-			capable = parseInt(matches[1] || 0) >= 7;
 		} else if (this.ua.match(/opera/i)) {
 			css_name = "opera";
 		} else if (this.ua.match(/mozilla/i)) {
@@ -47,15 +46,20 @@ var Dispatcher = {
 
 		if (css_name) {
 			$("body")
-				.addClass("has-js")
-				.addClass(css_name)
-				.addClass(capable? "capable" : "");
+				.addClass("js")
+				.addClass(css_name);
 			return css_name;
 		}
 	},
 
 	run: function() {
-		var page = $("head meta[name=page]").attr("content").toString().split("#");
+		var meta = $("head meta[name=page]");
+		
+		if (meta.length == 0) {
+			throw 'No meta tag found. Use something like <meta name="page" content="controller#action" />';
+		};
+		
+		var page = meta.attr("content").toString().split("#");
 		var controller_name = page[0];
 		var action_name = page[1];
 

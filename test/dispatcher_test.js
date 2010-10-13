@@ -1,4 +1,6 @@
 function prepare(ua) {
+	$("meta[name=page]").remove();
+	$("head").append('<meta name="page" content="" />');
 	$("body").removeAttr("class");
 	Dispatcher.ua = ua;
 	Dispatcher.init();
@@ -19,90 +21,80 @@ new Test.Unit.Runner({
 	// Detect Firefox
 	testDetectFirefox: function() { with(this) {
 		prepare("Firefox");
-		assertEqual(1, $("body.capable").length);
 		assertEqual(1, $("body.firefox").length);
-		assertEqual(1, $("body.has-js").length);
+		assertEqual(1, $("body.js").length);
 	}},
 
 	// Detect Safari
 	testDetectSafari: function() { with(this) {
 		prepare("Safari");
-		assertEqual(1, $("body.capable").length);
 		assertEqual(1, $("body.safari").length);
 		assertEqual(1, $("body.webkit").length);
-		assertEqual(1, $("body.has-js").length);
+		assertEqual(1, $("body.js").length);
 	}},
 
 	// Detect iPhone
 	testDetectiPhone: function() { with(this) {
 		prepare("iPhone");
-		assertEqual(1, $("body.capable").length);
 		assertEqual(1, $("body.iphone").length);
 		assertEqual(1, $("body.safari").length);
 		assertEqual(1, $("body.webkit").length);
-		assertEqual(1, $("body.has-js").length);
+		assertEqual(1, $("body.js").length);
 	}},
 
 	// Detect iPad
 	testDetectiPad: function() { with(this) {
 		prepare("iPad");
-		assertEqual(1, $("body.capable").length);
 		assertEqual(1, $("body.ipad").length);
 		assertEqual(1, $("body.safari").length);
 		assertEqual(1, $("body.webkit").length);
-		assertEqual(1, $("body.has-js").length);
+		assertEqual(1, $("body.js").length);
 	}},
 
 	// Detect Chrome
 	testDetectChrome: function() { with(this) {
 		prepare("Chrome");
-		assertEqual(1, $("body.capable").length);
 		assertEqual(1, $("body.chrome").length);
 		assertEqual(1, $("body.webkit").length);
-		assertEqual(1, $("body.has-js").length);
+		assertEqual(1, $("body.js").length);
 	}},
 
 	// Detect Opera
 	testDetectOpera: function() { with(this) {
 		prepare("Opera");
-		assertEqual(1, $("body.capable").length);
 		assertEqual(1, $("body.opera").length);
-		assertEqual(1, $("body.has-js").length);
+		assertEqual(1, $("body.js").length);
 	}},
 
 	// Detect IE6
 	testDetectIE6: function() { with(this) {
 		prepare("MSIE 6.0");
-		assertEqual(0, $("body.capable").length);
 		assertEqual(1, $("body.ie").length);
 		assertEqual(1, $("body.ie6").length);
-		assertEqual(1, $("body.has-js").length);
+		assertEqual(1, $("body.js").length);
 	}},
 
 	// Detect IE7
 	testDetectIE7: function() { with(this) {
 		prepare("MSIE 7.0");
-		assertEqual(1, $("body.capable").length);
 		assertEqual(1, $("body.ie").length);
 		assertEqual(1, $("body.ie7").length);
-		assertEqual(1, $("body.has-js").length);
+		assertEqual(1, $("body.js").length);
 	}},
 
 	// Detect IE8
 	testDetectIE8: function() { with(this) {
 		prepare("MSIE 8.0");
-		assertEqual(1, $("body.capable").length);
 		assertEqual(1, $("body.ie").length);
 		assertEqual(1, $("body.ie8").length);
-		assertEqual(1, $("body.has-js").length);
+		assertEqual(1, $("body.js").length);
 	}},
 
 	// Detect Mozilla
 	testDetectMozilla: function() { with(this) {
 		prepare("Mozilla");
-		assertEqual(1, $("body.capable").length);
 		assertEqual(1, $("body.mozilla").length);
-		assertEqual(1, $("body.has-js").length);
+		assertEqual(1, $("body.js").length);
 	}},
 
 	// Prevent event and propagation
@@ -225,4 +217,10 @@ new Test.Unit.Runner({
 		Dispatcher.run();
 		assert(triggered);
 	}},
+	
+	// Raise error when no meta tag is found.
+	testRaiseErrorWhenNoMetaTagIsFound: function() { with(this) {
+		$("meta[name=page]").remove();
+		assertRaise(null, Dispatcher.run);
+	}}
 });
