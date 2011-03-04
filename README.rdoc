@@ -56,7 +56,18 @@ The chain is executed in this order:
 
 Dispatcher also detect browser's user agent and set a body CSS class. If is IE,
 an additional body class identifying the version will be added.
-All browsers and IE7+ also add a body class "capable".
+
+=== Utilities
+
+If you want to add some disclaimer info when someone is using an older version of IE, you can use the <tt>Dispatcher.detectIE(minimumVersion, callback)</tt> function.
+
+  Dispatcher.detectIE(8, function(actual, required){
+    alert("You're using IE" + actual + " but the minimum required version is " + required + ".");
+  });
+
+Stopping events is a common place. Sometimes you need to use both <tt>event.preventDefault()</tt> and <tt>event.stopPropagation()</tt>, so you can simply use <tt>$.stopEvent(event)</tt>, just saving some key strokes.
+
+If you want an array with all browser meta classes, you can use the <tt>Dispatcher.browserInfo()</tt> function.
 
 == Troubleshooting
 
@@ -70,7 +81,7 @@ If you're migrating from Rails.js (the previous version), here's what you'll hav
 
 (The MIT License)
 
-Copyright © 2010 Nando Vieira (http://simplesideias.com.br)
+Copyright © 2011 Nando Vieira (http://nandovieira.com.br)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the ‘Software’), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

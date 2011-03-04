@@ -1,226 +1,284 @@
 function prepare(ua) {
-	$("meta[name=page]").remove();
-	$("head").append('<meta name="page" content="" />');
-	$("body").removeAttr("class");
-	Dispatcher.ua = ua;
-	Dispatcher.init();
-	App.sample = {};
+  $("meta[name=page]").remove();
+  $("head").append('<meta name="page" content="" />');
+  $("body").removeAttr("class");
+  Dispatcher.ua = ua;
+  Dispatcher.init();
+  App.sample = {};
 };
 
 new Test.Unit.Runner({
-	setup: function() {
-		prepare(navigator.userAgent);
-		$("meta[name=page]").attr("content", "");
-		App.sample = {};
-		Dispatcher.before = null;
-	},
+  setup: function() {
+    prepare(navigator.userAgent);
+    $("meta[name=page]").attr("content", "");
+    App.sample = {};
+    Dispatcher.before = null;
+  },
 
-	teardown: function() {
-	},
+  teardown: function() {
+  },
 
-	// Detect Firefox
-	testDetectFirefox: function() { with(this) {
-		prepare("Firefox");
-		assertEqual(1, $("body.firefox").length);
-		assertEqual(1, $("body.js").length);
-	}},
+  // Return browser info
+  testReturnBrowserInfo: function() { with(this) {
+    prepare("iPad");
+    var meta = Dispatcher.browserInfo();
 
-	// Detect Safari
-	testDetectSafari: function() { with(this) {
-		prepare("Safari");
-		assertEqual(1, $("body.safari").length);
-		assertEqual(1, $("body.webkit").length);
-		assertEqual(1, $("body.js").length);
-	}},
+    assertEqual(4, meta.length);
+    assertEqual("non-ie", meta[0]);
+    assertEqual("safari", meta[1]);
+    assertEqual("ipad", meta[2]);
+    assertEqual("webkit", meta[3]);
+  }},
 
-	// Detect iPhone
-	testDetectiPhone: function() { with(this) {
-		prepare("iPhone");
-		assertEqual(1, $("body.iphone").length);
-		assertEqual(1, $("body.safari").length);
-		assertEqual(1, $("body.webkit").length);
-		assertEqual(1, $("body.js").length);
-	}},
+  // Detect Firefox
+  testDetectFirefox: function() { with(this) {
+    prepare("Firefox");
+    assertEqual(1, $("body.firefox").length);
+    assertEqual(1, $("body.non-ie").length);
+    assertEqual(1, $("body.js").length);
+  }},
 
-	// Detect iPad
-	testDetectiPad: function() { with(this) {
-		prepare("iPad");
-		assertEqual(1, $("body.ipad").length);
-		assertEqual(1, $("body.safari").length);
-		assertEqual(1, $("body.webkit").length);
-		assertEqual(1, $("body.js").length);
-	}},
+  // Detect Safari
+  testDetectSafari: function() { with(this) {
+    prepare("Safari");
+    assertEqual(1, $("body.safari").length);
+    assertEqual(1, $("body.webkit").length);
+    assertEqual(1, $("body.non-ie").length);
+    assertEqual(1, $("body.js").length);
+  }},
 
-	// Detect Chrome
-	testDetectChrome: function() { with(this) {
-		prepare("Chrome");
-		assertEqual(1, $("body.chrome").length);
-		assertEqual(1, $("body.webkit").length);
-		assertEqual(1, $("body.js").length);
-	}},
+  // Detect iPhone
+  testDetectiPhone: function() { with(this) {
+    prepare("iPhone");
+    assertEqual(1, $("body.iphone").length);
+    assertEqual(1, $("body.safari").length);
+    assertEqual(1, $("body.webkit").length);
+    assertEqual(1, $("body.non-ie").length);
+    assertEqual(1, $("body.js").length);
+  }},
 
-	// Detect Opera
-	testDetectOpera: function() { with(this) {
-		prepare("Opera");
-		assertEqual(1, $("body.opera").length);
-		assertEqual(1, $("body.js").length);
-	}},
+  // Detect iPad
+  testDetectiPad: function() { with(this) {
+    prepare("iPad");
+    assertEqual(1, $("body.ipad").length);
+    assertEqual(1, $("body.safari").length);
+    assertEqual(1, $("body.webkit").length);
+    assertEqual(1, $("body.non-ie").length);
+    assertEqual(1, $("body.js").length);
+  }},
 
-	// Detect IE6
-	testDetectIE6: function() { with(this) {
-		prepare("MSIE 6.0");
-		assertEqual(1, $("body.ie").length);
-		assertEqual(1, $("body.ie6").length);
-		assertEqual(1, $("body.js").length);
-	}},
+  // Detect Chrome
+  testDetectChrome: function() { with(this) {
+    prepare("Chrome");
+    assertEqual(1, $("body.chrome").length);
+    assertEqual(1, $("body.webkit").length);
+    assertEqual(1, $("body.non-ie").length);
+    assertEqual(1, $("body.js").length);
+  }},
 
-	// Detect IE7
-	testDetectIE7: function() { with(this) {
-		prepare("MSIE 7.0");
-		assertEqual(1, $("body.ie").length);
-		assertEqual(1, $("body.ie7").length);
-		assertEqual(1, $("body.js").length);
-	}},
+  // Detect Opera
+  testDetectOpera: function() { with(this) {
+    prepare("Opera");
+    assertEqual(1, $("body.opera").length);
+    assertEqual(1, $("body.non-ie").length);
+    assertEqual(1, $("body.js").length);
+  }},
 
-	// Detect IE8
-	testDetectIE8: function() { with(this) {
-		prepare("MSIE 8.0");
-		assertEqual(1, $("body.ie").length);
-		assertEqual(1, $("body.ie8").length);
-		assertEqual(1, $("body.js").length);
-	}},
+  // Detect IE6
+  testDetectIE6: function() { with(this) {
+    prepare("MSIE 6.0");
+    assertEqual(1, $("body.ie").length);
+    assertEqual(1, $("body.ie6").length);
+    assertEqual(0, $("body.non-ie").length);
+    assertEqual(1, $("body.js").length);
+    assertEqual(1, $("body.lt-ie9").length);
+    assertEqual(1, $("body.lt-ie8").length);
+  }},
 
-	// Detect Mozilla
-	testDetectMozilla: function() { with(this) {
-		prepare("Mozilla");
-		assertEqual(1, $("body.mozilla").length);
-		assertEqual(1, $("body.js").length);
-	}},
+  // Detect IE7
+  testDetectIE7: function() { with(this) {
+    prepare("MSIE 7.0");
+    assertEqual(1, $("body.ie").length);
+    assertEqual(1, $("body.ie7").length);
+    assertEqual(0, $("body.non-ie").length);
+    assertEqual(1, $("body.js").length);
+    assertEqual(1, $("body.lt-ie9").length);
+    assertEqual(1, $("body.lt-ie8").length);
+  }},
 
-	// Prevent event and propagation
-	testPreventEventAndPropagation: function() { with(this) {
-		var containerTriggered = null;
-		var linkTriggered = null;
+  // Detect IE8
+  testDetectIE8: function() { with(this) {
+    prepare("MSIE 8.0");
+    assertEqual(1, $("body.ie").length);
+    assertEqual(1, $("body.ie8").length);
+    assertEqual(0, $("body.non-ie").length);
+    assertEqual(1, $("body.js").length);
+    assertEqual(1, $("body.lt-ie9").length);
+    assertEqual(0, $("body.lt-ie8").length);
+  }},
 
-		$("#sample-container").click(function(){
-			containerTriggered = true;
-		});
+  // Detect IE9
+  testDetectIE9: function() { with(this) {
+    prepare("MSIE 9.0");
+    assertEqual(1, $("body.ie").length);
+    assertEqual(1, $("body.ie9").length);
+    assertEqual(0, $("body.non-ie").length);
+    assertEqual(1, $("body.js").length);
+    assertEqual(0, $("body.lt-ie9").length);
+    assertEqual(0, $("body.lt-ie8").length);
+  }},
 
-		$("#sample-container a").click(function(e){
-			$.stopEvent(e);
-			linkTriggered = true;
-		});
+  // Detect Mozilla
+  testDetectMozilla: function() { with(this) {
+    prepare("Mozilla");
+    assertEqual(1, $("body.mozilla").length);
+    assertEqual(1, $("body.js").length);
+  }},
 
-		$("#sample-container a").trigger("click");
+  // Detect required IE version
+  testDetectRequiredIEVersion: function() { with(this) {
+    var args = {}
+      , handler = function(currentVersion, requiredVersion) {
+        args = {current: currentVersion, required: requiredVersion};
+      }
+    ;
 
-		assert(linkTriggered);
-		assertNull(containerTriggered);
-	}},
+    prepare("MSIE 8.0");
+    Dispatcher.detectIE(8, handler);
+    assertEqual(undefined, args.current);
+    assertEqual(undefined, args.required);
 
-	// Dispatch before callback
-	testDispatchBeforeCallback: function() { with(this) {
-		var triggered = null;
+    prepare("MSIE 7.0");
+    Dispatcher.detectIE(8, handler);
+    assertEqual(7, args.current);
+    assertEqual(8, args.required);
+  }},
 
-		App.before = function() { triggered = true; }
-		Dispatcher.run();
-		assert(triggered);
-	}},
+  // Prevent event and propagation
+  testPreventEventAndPropagation: function() { with(this) {
+    var containerTriggered = null
+      , linkTriggered = null
+    ;
 
-	// Dispatch after callback
-	testDispatchAfterCallback: function() { with(this) {
-	  var triggered = null;
+    $("#sample-container").click(function(){
+      containerTriggered = true;
+    });
 
-		App.after = function() { triggered = true; }
-		Dispatcher.run();
-		assert(triggered);
-	}},
+    $("#sample-container a").click(function(e){
+      $.stopEvent(e);
+      linkTriggered = true;
+    });
 
-	// Dispatch controller after callback
-	testDispatchControllerAfterCallback: function() { with(this) {
-	  var triggered = null;
+    $("#sample-container a").trigger("click");
 
-		App.sample.after = function() { triggered = true; }
-		$("meta[name=page]").attr("content", "sample");
-		Dispatcher.run();
-		assert(triggered);
-	}},
+    assert(linkTriggered);
+    assertNull(containerTriggered);
+  }},
 
-	// Dispatch controller's before callback
-	testDispatchControllerBeforeCallback: function() { with(this) {
-		var triggered = null;
+  // Dispatch before callback
+  testDispatchBeforeCallback: function() { with(this) {
+    var triggered = null;
 
-		App.sample.before = function() { triggered = true; }
-		$("meta[name=page]").attr("content", "sample");
-		Dispatcher.run();
-		assert(triggered);
-	}},
+    App.before = function() { triggered = true; }
+    Dispatcher.run();
+    assert(triggered);
+  }},
 
-	// Dispatch controller's action callback
-	testDispatchControllerActionCallback: function() { with(this) {
-		var triggered = null;
+  // Dispatch after callback
+  testDispatchAfterCallback: function() { with(this) {
+    var triggered = null;
 
-		App.sample.index = function() { triggered = true; }
-		$("meta[name=page]").attr("content", "sample#index");
+    App.after = function() { triggered = true; }
+    Dispatcher.run();
+    assert(triggered);
+  }},
 
-		Dispatcher.run();
-		assert(triggered);
-	}},
+  // Dispatch controller after callback
+  testDispatchControllerAfterCallback: function() { with(this) {
+    var triggered = null;
 
-	// Dispatch the chain
-	testDispatchTheChain: function() { with(this) {
-		var triggers = [];
+    App.sample.after = function() { triggered = true; }
+    $("meta[name=page]").attr("content", "sample");
+    Dispatcher.run();
+    assert(triggered);
+  }},
 
-		App.before = function() { triggers.push("before"); }
-		App.after = function() { triggers.push("after"); }
-		App.sample.before = function() { triggers.push("before-controller"); }
-		App.sample.index = function() { triggers.push("action"); }
-		App.sample.after = function() { triggers.push("after-controller"); }
+  // Dispatch controller's before callback
+  testDispatchControllerBeforeCallback: function() { with(this) {
+    var triggered = null;
 
-		$("meta[name=page]").attr("content", "sample#index");
+    App.sample.before = function() { triggered = true; }
+    $("meta[name=page]").attr("content", "sample");
+    Dispatcher.run();
+    assert(triggered);
+  }},
 
-		Dispatcher.run();
-		assertEqual("before, before-controller, action, after-controller, after", triggers.join(", "));
-	}},
+  // Dispatch controller's action callback
+  testDispatchControllerActionCallback: function() { with(this) {
+    var triggered = null;
 
-	// Dispatch create action as new
-	testDispatchCreateActionAsNew: function() { with(this) {
-		var triggered = null;
+    App.sample.index = function() { triggered = true; }
+    $("meta[name=page]").attr("content", "sample#index");
 
-		App.sample["new"] = function() { triggered = true; }
+    Dispatcher.run();
+    assert(triggered);
+  }},
 
-		$("meta[name=page]").attr("content", "sample#create");
+  // Dispatch the chain
+  testDispatchTheChain: function() { with(this) {
+    var triggers = [];
 
-		Dispatcher.run();
-		assert(triggered);
-	}},
+    App.before = function() { triggers.push("before"); }
+    App.after = function() { triggers.push("after"); }
+    App.sample.before = function() { triggers.push("before-controller"); }
+    App.sample.index = function() { triggers.push("action"); }
+    App.sample.after = function() { triggers.push("after-controller"); }
 
-	// Dispatch destroy action as remove
-	testDispatchDestroyActionAsRemove: function() { with(this) {
-		var triggered = null;
+    $("meta[name=page]").attr("content", "sample#index");
 
-		App.sample["remove"] = function() { triggered = true; }
+    Dispatcher.run();
+    assertEqual("before, before-controller, action, after-controller, after", triggers.join(", "));
+  }},
 
-		$("meta[name=page]").attr("content", "sample#destroy");
+  // Dispatch create action as new
+  testDispatchCreateActionAsNew: function() { with(this) {
+    var triggered = null;
 
-		Dispatcher.run();
-		assert(triggered);
-	}},
+    App.sample["new"] = function() { triggered = true; }
 
-	// Dispatch update action as edit
-	testDispatchUpdateActionAsEdit: function() { with(this) {
-		var triggered = null;
+    $("meta[name=page]").attr("content", "sample#create");
 
-		App.sample["edit"] = function() { triggered = true; }
+    Dispatcher.run();
+    assert(triggered);
+  }},
 
-		$("meta[name=page]").attr("content", "sample#update");
+  // Dispatch destroy action as remove
+  testDispatchDestroyActionAsRemove: function() { with(this) {
+    var triggered = null;
 
-		Dispatcher.run();
-		assert(triggered);
-	}},
-	
-	// Raise error when no meta tag is found.
-	testRaiseErrorWhenNoMetaTagIsFound: function() { with(this) {
-		$("meta[name=page]").remove();
-		assertRaise(null, Dispatcher.run);
-	}}
+    App.sample["remove"] = function() { triggered = true; }
+
+    $("meta[name=page]").attr("content", "sample#destroy");
+
+    Dispatcher.run();
+    assert(triggered);
+  }},
+
+  // Dispatch update action as edit
+  testDispatchUpdateActionAsEdit: function() { with(this) {
+    var triggered = null;
+
+    App.sample["edit"] = function() { triggered = true; }
+
+    $("meta[name=page]").attr("content", "sample#update");
+
+    Dispatcher.run();
+    assert(triggered);
+  }},
+
+  // Raise error when no meta tag is found.
+  testRaiseErrorWhenNoMetaTagIsFound: function() { with(this) {
+    $("meta[name=page]").remove();
+    assertRaise(null, Dispatcher.run);
+  }}
 });

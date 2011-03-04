@@ -1,5 +1,5 @@
 // Dispatcher.js - jQuery Dispatcher
-// Copyright (c) 2008-2010 Nando Vieira (simplesideias.com.br)
+// Copyright (c) 2008-2011 Nando Vieira (nandovieira.com.br)
 // Dual licensed under the MIT (MIT-LICENSE.txt)
 // and GPL (GPL-LICENSE.txt) license
 
@@ -8,96 +8,125 @@ if (!window.App) {
 }
 
 var Dispatcher = {
-	ALIASES: {
-		"create": "new",
-		"update": "edit",
-		"destroy": "remove"
-	},
+  ALIASES: {
+    "create": "new",
+    "update": "edit",
+    "destroy": "remove"
+  },
 
-	ua: navigator.userAgent,
+  ua: navigator.userAgent,
 
-	init: function() {
-		Dispatcher.run();
-		Dispatcher.browserName();
-	},
+  init: function() {
+    Dispatcher.run();
+    Dispatcher.setBrowserInfo();
+  },
 
-	browserName: function() {
-		var css_name = null;
-		var matches = null;
-		var capable = true;
+  detectIE: function(minimumVersion, callback) {
+    var matches = this.ua.match(/MSIE (\d+)/)
+      , version = parseInt(matches[1], 10)
+    ;
 
-		if (this.ua.match(/firefox/i)) {
-			css_name = "firefox";
-		} else if (this.ua.match(/chrome/i)) {
-			css_name = "chrome webkit";
-		} else if (this.ua.match(/iphone/i)) {
-			css_name = "safari iphone webkit";
-		} else if (this.ua.match(/ipad/i)) {
-			css_name = "safari ipad webkit";
-		} else if (this.ua.match(/safari/i)) {
-			css_name = "safari webkit";
-		} else if (matches = this.ua.match(/msie (\d+)/i)) {
-			css_name = "ie ie" + matches[1];
-		} else if (this.ua.match(/opera/i)) {
-			css_name = "opera";
-		} else if (this.ua.match(/mozilla/i)) {
-			css_name = "mozilla";
-		}
+    if (!matches) { return; }
 
-		if (css_name) {
-			$("body")
-				.addClass("js")
-				.addClass(css_name);
-			return css_name;
-		}
-	},
+    if (version < minimumVersion) {
+      callback(version, minimumVersion);
+    };
+  },
 
-	run: function() {
-		var meta = $("head meta[name=page]");
-		
-		if (meta.length == 0) {
-			throw 'No meta tag found. Use something like <meta name="page" content="controller#action" />';
-		};
-		
-		var page = meta.attr("content").toString().split("#");
-		var controller_name = page[0];
-		var action_name = page[1];
+  setBrowserInfo: function() {
+    $("body")
+      .removeClass("no-js")
+      .addClass("js")
+      .addClass(this.browserInfo().join(" "))
+    ;
+  },
 
-		action_name = Dispatcher.ALIASES[action_name] || action_name;
+  browserInfo: function() {
+    var meta = ["non-ie"]
+      , matches = null
+    ;
 
-		// Executed before every controller action
-		if (App.before) {
-			App.before();
-		}
+    if (this.ua.match(/firefox/i)) {
+      meta.push("firefox");
+    } else if (this.ua.match(/chrome/i)) {
+      $.merge(meta, ["chrome", "webkit"]);
+    } else if (this.ua.match(/iphone/i)) {
+      $.merge(meta, ["safari", "iphone", "webkit"]);
+    } else if (this.ua.match(/ipad/i)) {
+      $.merge(meta, ["safari", "ipad", "webkit"]);
+    } else if (this.ua.match(/safari/i)) {
+      $.merge(meta, ["safari", "webkit"]);
+    } else if ((matches = this.ua.match(/MSIE (\d+)/))) {
+      var version = parseInt(matches[1], 10);
 
-		if (App[controller_name]) {
-			// Executed before any action from the current controller
-			if (App[controller_name].before) {
-				App[controller_name].before();
-			}
+      meta.shift();
+      $.merge(meta, ["ie", "ie" + version]);
 
-			// The current action per-se
-			if (App[controller_name][action_name]) {
-				App[controller_name][action_name]();
-			}
+      if (version < 9) {
+        meta.push("lt-ie9");
+      }
 
-			// The after callback for the current controller
-      		if (App[controller_name].after) {
-				App[controller_name].after();
-      		}
-		}
+      if (version < 8) {
+        meta.push("lt-ie8");
+      }
+    } else if (this.ua.match(/opera/i)) {
+      meta.push("opera");
+    } else if (this.ua.match(/mozilla/i)) {
+      meta.push("mozilla");
+    }
 
-		if (App.after) {
-			App.after();
-		}
-	}
+    return meta;
+  },
+
+  run: function() {
+    var meta = $("head meta[name=page]")
+      , noMeta = 'No meta tag found. Use something like <meta name="page" content="controller#action" />'
+    ;
+
+    if (meta.length === 0) {
+      throw(noMeta);
+    }
+
+    var page = meta.attr("content").toString().split("#")
+      , controllerName = page[0]
+      , actionName = page[1]
+    ;
+
+    actionName = Dispatcher.ALIASES[actionName] || actionName;
+
+    // Executed before every controller action
+    if (App.before) {
+      App.before();
+    }
+
+    if (App[controllerName]) {
+      // Executed before any action from the current controller
+      if (App[controllerName].before) {
+        App[controllerName].before();
+      }
+
+      // The current action per-se
+      if (App[controllerName][actionName]) {
+        App[controllerName][actionName]();
+      }
+
+      // The after callback for the current controller
+      if (App[controllerName].after) {
+        App[controllerName].after();
+      }
+    }
+
+    if (App.after) {
+      App.after();
+    }
+  }
 };
 
 (function($){
-	$.stopEvent = function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-	};
+  $.stopEvent = function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+  };
 
-	$(document).ready(Dispatcher.init);
+  $(document).ready(Dispatcher.init);
 })(jQuery);
