@@ -6,7 +6,49 @@ Dispatcher requires jQuery.
 
 ## Usage
 
-### Custom app
+### Installation through bower
+
+If you're using Rails, you can create a `.bowerrc` file like the following:
+
+```javascript
+{
+  "directory": "app/assets/components"
+}
+```
+
+Then create a `bower.json` like this:
+
+```javascript
+{
+  "name": "myapp",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {}
+}
+```
+
+Install your dependency with `bower install dispatcher`.
+
+```text
+$ bower install dispatcher
+bower dispatcher#*              cached git://github.com/fnando/dispatcher-js.git#0510770257
+bower dispatcher#*            validate 0510770257 against git://github.com/fnando/dispatcher-js.git#*
+bower dispatcher#*                 new version for git://github.com/fnando/dispatcher-js.git#*
+bower dispatcher#*             resolve git://github.com/fnando/dispatcher-js.git#*
+bower dispatcher#*            download https://github.com/fnando/dispatcher-js/archive/v0.1.0.tar.gz
+bower dispatcher#*             extract archive.tar.gz
+bower dispatcher#*            resolved git://github.com/fnando/dispatcher-js.git#0.1.0
+bower dispatcher#~0.1.0        install dispatcher#0.1.0
+```
+
+### Using a custom app
+
+Add the following lines to your `application.js`:
+
+```javascript
+//= require jquery
+//= require dispatcher
+```
 
 To dispatch a given JavaScript for a page, you can use the `Dispatcher.run(app, route)` function.
 
@@ -72,7 +114,7 @@ $(document).ready(function(){
 });
 ```
 
-The latest release allows you to provide any object as your application. If you want the old behavior back, please read the "Compat mode" section.
+The latest release allows you to provide any object as your application. If you want the old behavior back, please read the "Using the compat mode" section.
 
 You can set functions to be execute before and after the actual route. For global callbacks, you can set the following attributes:
 
@@ -94,7 +136,15 @@ var app = {
 };
 ```
 
-### Compat mode
+### Using the compat mode
+
+Add the following lines to your `application.js`:
+
+```javascript
+//= require jquery
+//= require dispatcher
+//= require dispatcher/compat
+```
 
 To bring the old behaviour back, add a meta tag called +page+. This tag should have the controller and action names like the following.
 
@@ -119,14 +169,6 @@ def dispatcher_tag
 end
 ```
 
-Then you need to include `dispatcher.js` and `dispatcher-compat.js`
-
-```html
-<script type="text/javascript" src="jquery.js"></script>
-<script type="text/javascript" src="dispatcher.js"></script>
-<script type="text/javascript" src="lib.js"></script>
-```
-
 Your application must be defined as a global variable called +App+.
 
 ```javascript
@@ -145,7 +187,14 @@ The same `before` and `after` callbacks are available here.
 
 ### Turbolinks
 
-You can also use Dispatcher with Turbolinks. Just provide an app to the `Dispatcher.turbolinks` function.
+You can also use Dispatcher with Turbolinks. Add the following lines to your `application.js`:
+
+```javascript
+//= require jquery
+//= require dispatcher
+```
+
+Then provide an app to the `Dispatcher.turbolinks` function.
 
 ```javascript
 var MyApp = {
@@ -165,6 +214,14 @@ This will require a route defined in the `<body>` element:
 <body data-route="<%= dispatcher_route %>">
 </body>
 ```
+
+### Aliases
+
+Some action names are aliased:
+
+- `update` will map to `edit`.
+- `create` will map to `new`.
+- `destroy` will map to `remove`.
 
 == License
 
