@@ -82,12 +82,8 @@ The `route` string will be defined by your server-side app. In Rails, you can cr
 
 ```ruby
 def dispatcher_route
-  controller_name = controller.class.name
-    .underscore
-    .gsub(/\//, "_")
-    .gsub!(/_controller$/, "")
-
-  "#{controller_name}##{controller.action_name}"
+  controller_name = controller_path.gsub(/\//, "_")
+  "#{controller_name}##{action_name}"
 end
 ```
 
@@ -156,12 +152,8 @@ Rails developers can use the helpers below:
 
 ```ruby
 def dispatcher_route
-  controller_name = controller.class.name
-    .underscore
-    .gsub(/\//, "_")
-    .gsub!(/_controller$/, "")
-
-  "#{controller_name}##{controller.action_name}"
+  controller_name = controller_path.gsub(/\//, "_")
+  "#{controller_name}##{action_name}"
 end
 
 def dispatcher_tag
