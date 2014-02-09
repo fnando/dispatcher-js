@@ -1,0 +1,15 @@
+{
+  "name": "dispatcher",
+  "version": "0.1.0",
+  "main": "dispatcher.js",
+  "devDependencies": {
+    "jasmine": "~2.0.0",
+    "jquery": "~2.1.0"
+  },
+  "ignore": [
+    "spec",
+    "vendor",
+    ".gitignore",
+    ".bowerrc"
+  ]
+}
