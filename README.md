@@ -121,21 +121,25 @@ end
 
 Then you need to include `dispatcher.js` and `dispatcher-compat.js`
 
-  <script type="text/javascript" src="jquery.js"></script>
-  <script type="text/javascript" src="dispatcher.js"></script>
-  <script type="text/javascript" src="lib.js"></script>
+```html
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dispatcher.js"></script>
+<script type="text/javascript" src="lib.js"></script>
+```
 
 Your application must be defined as a global variable called +App+.
 
-  App.users = {};
+```javascript
+App.users = {};
 
-  App.users["index"] = function() {
-    // execute specific code for users/index
-  };
+App.users["index"] = function() {
+  // execute specific code for users/index
+};
 
-  App.users["new"] = function() {
-    // execute specific code for users/new
-  }
+App.users["new"] = function() {
+  // execute specific code for users/new
+}
+```
 
 The same `before` and `after` callbacks are available here.
 
