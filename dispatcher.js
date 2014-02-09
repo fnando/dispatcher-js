@@ -29,6 +29,12 @@ var Dispatcher = (function(){
     return reason;
   };
 
+  Dispatcher.init = function(app) {
+    $(document).on("ready page:load", function(){
+      Dispatcher.run(app, $("body").data("route"));
+    });
+  };
+
   Dispatcher.run = function(app, route) {
     var reason;
 
@@ -47,15 +53,6 @@ var Dispatcher = (function(){
     }
 
     Dispatcher.run(window.App, meta.attr("content"));
-  };
-
-  Dispatcher.turbolinks = function(app) {
-    var runner = function() {
-      Dispatcher.run(app, $("body").data("route"));
-    };
-
-    $(document).on("page:load", runner);
-    $(document).ready(runner);
   };
 
   Dispatcher.prototype.run = function(route) {
@@ -92,6 +89,14 @@ var Dispatcher = (function(){
     return action;
   };
 
+  Dispatcher.turbolinks = function(app) {
+    try {
+      console.warn("Dispatcher.turbolinks is deprecated; call Dispatcher.init instead.");
+    } catch (e) { /* no-op */ }
+
+    Dispatcher.init(app);
+  };
+
   // Execute the specified callback when defined.
   Dispatcher.prototype.invoke = function(callback) {
     callback && callback();
@@ -101,6 +106,7 @@ var Dispatcher = (function(){
   return {
       run: Dispatcher.run
     , compat: Dispatcher.compat
+    , init: Dispatcher.init
     , turbolinks: Dispatcher.turbolinks
     , aliases: Dispatcher.ALIASES
   };

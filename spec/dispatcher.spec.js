@@ -106,7 +106,7 @@ describe("dispatcher.js", function() {
   it("listens turbolinks' event", function() {
     app.site = {index: callback};
     $("body").attr("data-route", "site#index");
-    Dispatcher.turbolinks(app);
+    Dispatcher.init(app);
 
     $(document).trigger("page:load");
 
@@ -124,5 +124,12 @@ describe("dispatcher.js", function() {
       expect(callback).toHaveBeenCalled();
       next();
     });
+  });
+
+  it("deprecates Dispatcher.turbolinks", function() {
+    spyOn(console, "warn");
+    Dispatcher.turbolinks(app);
+
+    expect(console.warn).toHaveBeenCalled();
   });
 });

@@ -64,7 +64,7 @@ var app = {
 };
 ```
 
-To trigger this info, you'll need to pass the route like the following:
+To manually trigger this route, just call the `Dispatcher.run` function like the following:
 
 ```javascript
 Dispatcher.run(app, "site#index");
@@ -110,7 +110,15 @@ $(document).ready(function(){
 });
 ```
 
+Instead of doing this wrapper manually, you can call `Dispatcher.init`, which receives an application and binds to the document's `ready` and `page:load` events. There's no need to wrapper in a jQuery initialize, since this done internally.
+
+```javascript
+Dispatcher.init(app);
+```
+
 The latest release allows you to provide any object as your application. If you want the old behavior back, please read the "Using the compat mode" section.
+
+## Callbacks
 
 You can set functions to be execute before and after the actual route. For global callbacks, you can set the following attributes:
 
@@ -179,14 +187,7 @@ The same `before` and `after` callbacks are available here.
 
 ### Turbolinks
 
-You can also use Dispatcher with Turbolinks. Add the following lines to your `application.js`:
-
-```javascript
-//= require jquery
-//= require dispatcher
-```
-
-Then provide an app to the `Dispatcher.turbolinks` function.
+Dispatcher works with Turbolinks. You don't have to do anything special and, to be frank, the code is exactly the same. You just need to set up the `data-route` attribute in your `<body>` element.
 
 ```javascript
 var MyApp = {
@@ -197,14 +198,11 @@ var MyApp = {
   }
 };
 
-Dispatcher.turbolinks(MyApp);
+Dispatcher.init(MyApp);
 ```
 
-This will require a route defined in the `<body>` element:
-
 ```html
-<body data-route="<%= dispatcher_route %>">
-</body>
+<body data-route="<%= dispatcher_route %>"></body>
 ```
 
 ### Aliases
