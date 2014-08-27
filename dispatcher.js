@@ -36,8 +36,6 @@ var Dispatcher = (function(){
   };
 
   Dispatcher.run = function(app, route) {
-    var reason;
-
     if (!route || typeof(route) !== "string") {
       throw new Error("You have to provide the route like site#index; " + Dispatcher.errorReason(route));
     }
