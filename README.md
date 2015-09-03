@@ -136,8 +136,8 @@ You can set functions to be execute before and after the actual route. For globa
 
 ```javascript
 var app = {
-    before: function() {}
-  , after: function() {}
+  before: function() {},
+  after: function() {}
 };
 ```
 
@@ -146,8 +146,8 @@ You can also set these callbacks for each controller:
 ```javascript
 var app = {
   site: {
-      before: function() {}
-    , after: function() {}
+    before: function() {},
+    after: function() {}
   }
 };
 ```
@@ -181,7 +181,7 @@ def dispatcher_tag
 end
 ```
 
-Your application must be defined as a global variable called +App+.
+Your application must be defined as a global variable called `App`.
 
 ```javascript
 App.users = {};
