@@ -1,16 +1,14 @@
 var Dispatcher = (function(){
   "use strict";
 
-  function Dispatcher(app, controller, action) {
+  function Dispatcher(app) {
     this.app = app || {};
-    this.controller = controller;
-    this.action = action;
   }
 
   Dispatcher.ALIASES = {
-      "update": "edit"
-    , "create": "new"
-    , "destroy": "remove"
+    "update": "edit",
+    "create": "new",
+    "destroy": "remove"
   };
 
   Dispatcher.errorReason = function(route) {
@@ -27,6 +25,12 @@ var Dispatcher = (function(){
     }
 
     return reason;
+  };
+
+  Dispatcher.proxy = function(callback, controller, action) {
+    return function() {
+      callback && callback.call(null, controller, action);
+    };
   };
 
   Dispatcher.init = function(app) {
@@ -60,10 +64,15 @@ var Dispatcher = (function(){
     var actionName = route[1];
     var controller = this.getController(controllerName);
     var action = this.getAction(controller, actionName);
+    var notFound = Dispatcher.proxy(
+      this.app.routeNotFound,
+      controllerName,
+      actionName
+    );
 
     this.invoke(this.app.before);
     this.invoke(controller.before);
-    this.invoke(action);
+    this.invoke(action, notFound);
     this.invoke(controller.after);
     this.invoke(this.app.after);
   };
@@ -96,16 +105,17 @@ var Dispatcher = (function(){
   };
 
   // Execute the specified callback when defined.
-  Dispatcher.prototype.invoke = function(callback) {
+  Dispatcher.prototype.invoke = function(callback, defaultCallback) {
+    callback = callback || defaultCallback;
     callback && callback();
   };
 
   // Expose the interface.
   return {
-      run: Dispatcher.run
-    , compat: Dispatcher.compat
-    , init: Dispatcher.init
-    , turbolinks: Dispatcher.turbolinks
-    , aliases: Dispatcher.ALIASES
+    run: Dispatcher.run,
+    compat: Dispatcher.compat,
+    init: Dispatcher.init,
+    turbolinks: Dispatcher.turbolinks,
+    aliases: Dispatcher.ALIASES
   };
 })();

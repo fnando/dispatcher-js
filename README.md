@@ -118,6 +118,18 @@ Dispatcher.init(app);
 
 The latest release allows you to provide any object as your application. If you want the old behavior back, please read the "Using the compat mode" section.
 
+## Missing Routes
+
+If you want to trap all missing routes, just define the `routeNotFound()` callback.
+
+```javascript
+var app = {
+  routeNotFound: function(controller, action) {
+    console.log("Route not found:", controller, action);
+  }
+};
+```
+
 ## Callbacks
 
 You can set functions to be execute before and after the actual route. For global callbacks, you can set the following attributes:

@@ -132,4 +132,11 @@ describe("dispatcher.js", function() {
 
     expect(console.warn).toHaveBeenCalled();
   });
+
+  it("triggers missing route handler", function() {
+    app.routeNotFound = callback;
+    Dispatcher.run(app, 'missing#route');
+
+    expect(callback).toHaveBeenCalledWith("missing", "route");
+  });
 });
