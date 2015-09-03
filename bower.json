@@ -1,6 +1,6 @@
 {
   "name": "dispatcher",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "main": "dispatcher.js",
   "devDependencies": {
     "jasmine": "~2.0.0",
